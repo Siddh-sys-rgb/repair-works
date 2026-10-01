@@ -135,6 +135,9 @@ def act(database, job_id, action, data, persona_id):
         if job["revision"] != expected_revision:
             raise ConflictError("This ticket changed in another session. Reload it before trying again.")
         changes, details = transition(job, action, data, persona_id)
+        # Preserve the accepted values, including earlier quotes and notes,
+        # even if a later allowed action replaces the current job projection.
+        details["changes"] = dict(changes)
         new_revision = expected_revision + 1
         timestamp = now()
         changes.update(revision=new_revision, updated_at=timestamp)

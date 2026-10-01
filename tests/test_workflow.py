@@ -45,6 +45,10 @@ def test_revised_quote_invalidates_customer_old_revision(client, headers, job):
     assert act(client, headers, old, "approve", confirmed=True).status_code == 409
     current = act(client, headers, updated, "approve", confirmed=True).json["job"]
     assert current["estimate_total"] == "750.00"
+    quotes = [event for event in client.get(f"/api/jobs/{job['id']}").json["events"] if event["action"] == "estimate"]
+    assert quotes[0]["details"]["changes"]["parts_paise"] == 50000
+    assert quotes[1]["details"]["changes"]["parts_paise"] == 48025
+    assert quotes[1]["details"]["changes"]["diagnosis"] == "Replace charging port assembly"
     persona(client, headers, "tech-amit")
     assert act(client, headers, current, "estimate", diagnosis="Increase price", parts="999", labour="250").status_code == 409
 
