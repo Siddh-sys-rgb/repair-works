@@ -1,6 +1,7 @@
 """SQLite transactions keep assignment, job versions, and audit events consistent."""
 
 from datetime import datetime, timezone
+from contextlib import closing
 import hashlib
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ def connect(path):
 
 def initialize(path):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    with connect(path) as database:
+    with closing(connect(path)) as database:
         database.execute("PRAGMA journal_mode = WAL")
         database.executescript("""
             CREATE TABLE IF NOT EXISTS jobs (
@@ -51,7 +52,7 @@ def initialize(path):
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL,
                 CHECK (status IN ('intake','cancelled') OR assigned_to IS NOT NULL),
-                CHECK (status NOT IN ('repair','ready','collected') OR customer_decision = 'approve')
+                CHECK (status NOT IN ('repair','ready','collected') OR (customer_decision IS NOT NULL AND customer_decision = 'approve'))
             );
             CREATE TABLE IF NOT EXISTS events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

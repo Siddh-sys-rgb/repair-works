@@ -21,6 +21,7 @@ def create_app(config=None):
         DATABASE=str(instance / "workshop.sqlite3"),
         DATA_DIR=str(instance),
         MAX_CONTENT_LENGTH=32 * 1024,
+        SESSION_COOKIE_NAME="repair_session",
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
         TRUSTED_HOSTS=["127.0.0.1", "localhost", "[::1]"],
