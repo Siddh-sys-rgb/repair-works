@@ -132,6 +132,7 @@ function renderTicket(body) {
   $("#ticket-device").textContent = job.device;
   $("#ticket-customer").textContent = `${job.customer_name} · Device inspection consent recorded`;
   $("#ticket-status").textContent = job.status_label;
+  $("#ticket-status").hidden = false;
   $("#ticket-status").className = `status-badge ${job.status}`;
   $("#ticket-content").hidden = false;
   $("#ticket-issue").textContent = job.issue;
@@ -173,6 +174,9 @@ async function route() {
     if (view === "ticket") {
       state.job = null;
       $("#ticket-content").hidden = true;
+      $("#ticket-number").textContent = "";
+      $("#ticket-customer").textContent = "";
+      $("#ticket-status").hidden = true;
       $("#ticket-device").textContent = "Loading ticket…";
       const body = await api(`/api/jobs/${encodeURIComponent(hash.slice(7))}`);
       if (version !== state.routeVersion) return;

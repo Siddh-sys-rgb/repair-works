@@ -73,7 +73,7 @@ def create_app(config=None):
             return jsonify(error="Cross-origin changes are not allowed."), 403
         token = request.headers.get("X-CSRF-Token", "")
         expected = session.get("csrf", "")
-        if not token or not expected or not hmac.compare_digest(token, expected):
+        if not token or not token.isascii() or not expected or not hmac.compare_digest(token, expected):
             return jsonify(error="Reload this page to obtain a valid CSRF token."), 403
         return None
 

@@ -42,8 +42,13 @@ def text(value, name, maximum=200, required=True):
 def money(value, name):
     if isinstance(value, bool) or not isinstance(value, (str, int, float)) or len(str(value)) > 24:
         raise ValidationError(f"{name} must be an INR amount.")
+    # Explicit decimal notation prevents tiny scientific values from silently
+    # underflowing to zero when Decimal applies its arithmetic context.
+    literal = str(value).strip()
+    if not re.fullmatch(r"\d+(?:\.\d{1,2})?", literal):
+        raise ValidationError(f"{name} must use a plain amount with at most two decimal places.")
     try:
-        number = Decimal(str(value))
+        number = Decimal(literal)
     except InvalidOperation as error:
         raise ValidationError(f"{name} must be an INR amount.") from error
     if not number.is_finite() or number < 0 or number > 100000 or number * 100 != (number * 100).to_integral_value():

@@ -44,6 +44,7 @@ def test_estimate_limits_and_owner_rules(client, headers, job):
 def test_csrf_token_and_same_origin_are_required(client, headers, intake_data):
     assert client.post("/api/jobs", json=intake_data).status_code == 403
     assert client.post("/api/jobs", json=intake_data, headers={"X-CSRF-Token": "wrong"}).status_code == 403
+    assert client.post("/api/jobs", json=intake_data, headers={"X-CSRF-Token": "invalid✕"}).status_code == 403
     foreign = {**headers, "Origin": "https://other.example"}
     assert client.post("/api/jobs", json=intake_data, headers=foreign).status_code == 403
     same = {**headers, "Origin": "http://localhost"}
