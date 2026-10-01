@@ -30,11 +30,12 @@ STATUS_LABELS = {
 CLOSED = {"collected", "cancelled"}
 
 
-def text(value, name, maximum=200, required=True):
+def text(value, name, maximum=200, required=True, multiline=False):
     if not isinstance(value, str):
         raise ValidationError(f"{name} must be text.")
-    value = value.strip()
-    if (required and not value) or len(value) > maximum or any(ord(char) < 32 for char in value):
+    value = value.replace("\r\n", "\n").replace("\r", "\n").strip()
+    invalid_control = any(ord(char) < 32 and not (multiline and char == "\n") for char in value)
+    if (required and not value) or len(value) > maximum or invalid_control:
         raise ValidationError(f"{name} must contain {'1' if required else '0'}–{maximum} printable characters.")
     return value
 
@@ -76,7 +77,7 @@ def intake(data):
         "customer_name": text(data.get("customer_name"), "Customer name", 80),
         "customer_ref": text(data.get("customer_ref", ""), "Customer reference", 40, required=False),
         "device": text(data.get("device"), "Device", 100),
-        "issue": text(data.get("issue"), "Reported issue", 500),
+        "issue": text(data.get("issue"), "Reported issue", 500, multiline=True),
         "accessories": text(data.get("accessories", "None"), "Accessories", 200),
         "consent": True,
         "request_id": request_id,
@@ -111,7 +112,7 @@ def transition(job, action, data, persona_id):
     if action == "estimate":
         owner()
         state("diagnosis", "awaiting_approval")
-        diagnosis = text(data.get("diagnosis"), "Diagnosis", 600)
+        diagnosis = text(data.get("diagnosis"), "Diagnosis", 600, multiline=True)
         parts = money(data.get("parts"), "Parts cost")
         labour = money(data.get("labour"), "Labour cost")
         if not 0 < parts + labour <= 10000000:
@@ -133,7 +134,7 @@ def transition(job, action, data, persona_id):
         state("repair")
         if data.get("tested") is not True:
             raise ValidationError("Confirm the functional check before marking the device ready.")
-        return {"status": "ready", "completion_note": text(data.get("completion_note"), "Completion note", 600)}, {"functional_check": True}
+        return {"status": "ready", "completion_note": text(data.get("completion_note"), "Completion note", 600, multiline=True)}, {"functional_check": True}
     if action == "collect":
         role("desk")
         state("ready")

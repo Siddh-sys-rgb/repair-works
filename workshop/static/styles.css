@@ -148,6 +148,7 @@ td a { color: var(--blue); text-decoration: none; font-size: 10px; font-weight: 
 .intake-detail span { font-size: 10px; color: var(--muted); }
 .intake-detail p { font-size: 12px; margin: 8px 0 0; line-height: 1.7; overflow-wrap: anywhere; }
 .diagnosis-note { font-size: 12px; line-height: 1.75; margin: 0 0 18px; }
+#ticket-issue, #diagnosis-note, #completion-note { white-space: pre-line; }
 .estimate-lines { display: grid; gap: 13px; padding: 15px 17px; background: #f7f8fc; border-radius: 6px; font-size: 11px; }
 .estimate-lines > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .estimate-lines .estimate-total { font-size: 14px; border-top: 1px solid #dfe3ef; padding-top: 13px; }

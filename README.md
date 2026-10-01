@@ -113,7 +113,7 @@ python -m pip check
 
 For the exact tested environment, install `requirements-tested.txt` instead. It includes the development tools as well as Flask.
 
-The current local suite has **66 passing tests** and **98% Python statement coverage**. It checks complete and declined workflows, invalid skips, role permissions, revised quotes, closed records, confirmation flags, exact monetary limits, CSRF and origin enforcement, cookie isolation, persistent sessions, repeated intake requests, atomic audit writes, and simultaneous claims on separate SQLite connections. One test injects an audit-write failure and verifies the job change rolls back too. The database approval constraint is also tested directly, including a `NULL` decision.
+The current local suite has **67 passing tests** and **98% Python statement coverage**. It checks complete and declined workflows, invalid skips, role permissions, revised quotes, closed records, confirmation flags, exact monetary limits, safe multiline service notes, CSRF and origin enforcement, cookie isolation, persistent sessions, repeated intake requests, atomic audit writes, and simultaneous claims on separate SQLite connections. One test injects an audit-write failure and verifies the job change rolls back too. The database approval constraint is also tested directly, including a `NULL` decision.
 
 Read [validation notes](docs/VALIDATION.md) for scope and practical limits. The tests use temporary databases and fictional data, and do not call an external service. The test suite exercises the Flask API and domain layer; screenshots and browser checks cover the actual interface separately. A prepared workflow is included in `.github/workflows/tests.yml`; its presence does not mean remote CI has run.
 

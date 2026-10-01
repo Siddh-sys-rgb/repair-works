@@ -9,7 +9,7 @@ python -m pytest --cov=workshop --cov-report=term-missing --cov-fail-under=90
 python -m pip check
 ```
 
-Result: **66 passed**, **98% Python statement coverage**, and **no broken requirements**. These tests are offline and each uses a temporary database or a factory-specific temporary directory. They do not mutate the running demo's tickets.
+Result: **67 passed**, **98% Python statement coverage**, and **no broken requirements**. These tests are offline and each uses a temporary database or a factory-specific temporary directory. They do not mutate the running demo's tickets.
 
 | Area | Evidence |
 |---|---|

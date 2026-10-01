@@ -18,7 +18,7 @@ def test_exact_rupee_conversion(value, expected):
 @pytest.mark.parametrize("field,value", [
     ("customer_name", ""), ("customer_name", "x" * 81), ("customer_name", 1),
     ("customer_ref", "x" * 41), ("device", "x" * 101), ("issue", "x" * 501),
-    ("accessories", "x" * 201), ("issue", "Newline\nnot printable"),
+    ("accessories", "x" * 201), ("issue", "Invalid\x00control character"),
     ("consent", False), ("consent", "true"), ("request_id", "short"), ("request_id", "space not allowed"),
 ])
 def test_intake_validation_rejects_bad_inputs(client, headers, intake_data, field, value):
@@ -102,3 +102,16 @@ def test_user_markup_stays_data_in_api_and_is_not_in_initial_html(client, header
     assert markup.encode() not in client.get("/").data
     assert b"Persona switching simulates roles; it is not a login" in client.get("/").data
     assert "request_hash" not in created and "request_id" not in created
+
+
+def test_multiline_service_notes_are_preserved_but_names_stay_single_line(client, headers, intake_data):
+    response = client.post("/api/jobs", json={**intake_data, "issue": "Loose port.\r\nCharging disconnects."}, headers=headers)
+    assert response.status_code == 201
+    assert response.json["job"]["issue"] == "Loose port.\nCharging disconnects."
+    persona(client, headers, "tech-amit")
+    job = act(client, headers, response.json["job"], "claim").json["job"]
+    job = act(client, headers, job, "estimate", diagnosis="Port damaged.\nReplace assembly.", parts="480", labour="210").json["job"]
+    assert job["diagnosis"] == "Port damaged.\nReplace assembly."
+    persona(client, headers, "desk")
+    bad_name = {**intake_data, "request_id": "test-multiline-name", "customer_name": "Dev\nPatel"}
+    assert client.post("/api/jobs", json=bad_name, headers=headers).status_code == 422
