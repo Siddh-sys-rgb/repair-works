@@ -33,6 +33,10 @@ Statement coverage is a useful regression signal, not proof that every browser b
 
 Working screenshots are stored in `docs/screenshots/` and embedded in the README. The browser review is performed against the actual loopback server, including a narrow mobile layout. The final screenshot/documentation commit records captures after the interface is tested. Screenshots demonstrate UI behavior; they do not substitute for the separate-connection concurrency tests.
 
+On 1 October 2026 the running browser completed Pooja Rao's fictional Motorola G32 ticket: Amit claimed it, recorded parts ₹650.50 plus labour ₹250.00, a simulated customer approved the ₹900.50 estimate, Amit recorded a functional check, and Meera recorded collection. Every accepted stage appeared in the service timeline. Closed-ticket history remained available.
+
+The captured workflow image shows the estimate awaiting approval; the overview/mobile images show the board after collection. The 1280-pixel desktop and 390-pixel mobile boards had no horizontal document overflow. The final browser console contained no warnings or errors. A shared-browser API check also verified this app's session remained independent of Sutra and Nirikshak running on neighbouring localhost ports.
+
 ## Practical limits
 
 - Roles are explicitly simulated. Anyone at the local demo can switch persona. There is no user authentication or customer identity verification.
