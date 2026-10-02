@@ -1,5 +1,7 @@
 # Repair Works — Mobile Repair Workshop Desk
 
+[![Tests](https://github.com/Siddh-sys-rgb/repair-works/actions/workflows/tests.yml/badge.svg)](https://github.com/Siddh-sys-rgb/repair-works/actions/workflows/tests.yml)
+
 A small Ahmedabad mobile repair shop receives a cracked screen, quotes the customer, and hands the device back after repair. When that work moves between shifts, the next action and the customer's approval should remain clear.
 
 **Repair Works** is a standalone Flask application that tracks that workflow on a cobalt service board. A technician must claim a ticket before diagnosis, a customer decision must approve its estimate before repair, and a functional check must precede collection. Two technicians claiming the same ticket cannot both win.
@@ -22,7 +24,14 @@ The shop, customers, devices and service notes are fictional. The application ru
 
 ## Start locally
 
-Use **Python 3.10–3.12**. The local verification environment used Python 3.12.14. Python 3.10 and 3.12 are configured in the prepared CI workflow; remote CI has not been run for this local repository.
+Use **Python 3.10–3.12**. The local verification environment used Python 3.12.14. The GitHub Actions workflow checks Python 3.10 and 3.12 on Linux; see [current CI runs](https://github.com/Siddh-sys-rgb/repair-works/actions/workflows/tests.yml).
+
+Clone the standalone repository first (or download its ZIP):
+
+```bash
+git clone https://github.com/Siddh-sys-rgb/repair-works.git repair-shop-desk
+cd repair-shop-desk
+```
 
 From this project's folder:
 
@@ -115,7 +124,7 @@ For the exact tested environment, install `requirements-tested.txt` instead. It 
 
 The current local suite has **67 passing tests** and **98% Python statement coverage**. It checks complete and declined workflows, invalid skips, role permissions, revised quotes, closed records, confirmation flags, exact monetary limits, safe multiline service notes, CSRF and origin enforcement, cookie isolation, persistent sessions, repeated intake requests, atomic audit writes, and simultaneous claims on separate SQLite connections. One test injects an audit-write failure and verifies the job change rolls back too. The database approval constraint is also tested directly, including a `NULL` decision.
 
-Read [validation notes](docs/VALIDATION.md) for scope and practical limits. The tests use temporary databases and fictional data, and do not call an external service. The test suite exercises the Flask API and domain layer; screenshots and browser checks cover the actual interface separately. A prepared workflow is included in `.github/workflows/tests.yml`; its presence does not mean remote CI has run.
+Read [validation notes](docs/VALIDATION.md) for scope and practical limits. The tests use temporary databases and fictional data, and do not call an external service. The test suite exercises the Flask API and domain layer; screenshots and browser checks cover the actual interface separately. The workflow is included in `.github/workflows/tests.yml`; [GitHub Actions](https://github.com/Siddh-sys-rgb/repair-works/actions/workflows/tests.yml) records remote results.
 
 ## API and boundaries
 
@@ -151,7 +160,7 @@ repair-shop-desk/
 │   └── static/                 # Native CSS, JavaScript, SVG mark
 ├── tests/                     # Workflow, validation, concurrency and persistence
 ├── docs/                      # Validation and actual working screenshots
-├── .github/workflows/         # Checks prepared for a future push
+├── .github/workflows/         # Linux workflow checks
 ├── requirements*.txt
 └── instance/                  # Ignored local database and signing key
 ```
@@ -169,7 +178,7 @@ Browser sessions use the distinct `repair_session` cookie so this project can ru
 - Which rules belong in the state machine, which can SQLite enforce, and which require genuine authentication?
 - How would you add authenticated customer links, a parts reservation workflow, or warranty rework without reopening a collected record?
 
-The repository's commits represent actual local development modules. No dates were fabricated and no remote operations were performed. Screenshots are captures of the running application. Private learning and design notes are kept outside this repository so they will not be included in a later push.
+The repository's commits represent actual local development modules. No dates were fabricated; the actual module commits were uploaded individually. Screenshots are captures of the running application. Private learning and design notes are kept outside this repository and are not part of this public repository.
 
 ## License
 

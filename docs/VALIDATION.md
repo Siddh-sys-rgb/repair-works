@@ -48,4 +48,4 @@ The captured workflow image shows the estimate awaiting approval; the overview/m
 - There is no pagination. The board is sized for a small demonstration dataset.
 - Audit events are immutable through the API, but the local database owner can edit the file. This is not a tamper-evident audit system.
 - No schema migration system is implemented in this initial release. Preserve real data before any future schema change; practice with a separate fresh `--data-dir`.
-- The prepared GitHub workflow has not run remotely. This project currently has local commits only.
+- The repository is public; [GitHub Actions](https://github.com/Siddh-sys-rgb/repair-works/actions/workflows/tests.yml) records Linux matrix results separately from these original local checks.
